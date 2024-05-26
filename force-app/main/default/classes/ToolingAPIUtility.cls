@@ -1,11 +1,11 @@
 public with sharing class ToolingAPIUtility {
     public static final String endpoint = '/services/data/v51.0/tooling/query/?q=';
-    public static final String namedCredential = 'myOrgNC'; // Reemplaza con el nombre de tu Named Credential
+    public static final String namedCredential = 'myOrgNC'; //Nombre del Named Credential
 
     
     @AuraEnabled(cacheable=true)
     public static String queryToolingAPI(String query) {
-
+        
         String urlString = endpoint + EncodingUtil.urlEncode(query, 'UTF-8');
         String baseUrl = 'callout:' + namedCredential;
 

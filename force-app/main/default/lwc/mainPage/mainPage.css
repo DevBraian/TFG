@@ -1,3 +1,25 @@
-.main{
-    background-color: rgb(119, 237, 255);
+
+.header-container {
+    border: 1px solid black;
+}
+
+.main-container{
+    padding: 10px;
+    display: block;
+}
+
+.body-container{
+    border: 1px solid green;
+    padding: 5px;
+    display: flex;
+}
+
+.flow-selector-container{
+    border: 1px solid blue;
+    flex:2;
+}
+
+.flow-info-container{
+    border: 1px solid red;
+    flex:8;
 }

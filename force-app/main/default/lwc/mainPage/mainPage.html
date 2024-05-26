@@ -1,8 +1,19 @@
 <template>
-    <div class="main">
-        <p>HELLO MainPage from HTML :D</p>
+    <div class="main-container slds-card">
+        <div class="header-container slds-text-heading_medium">Generación de casos de uso</div>
+        <p>HELLO MainPage from HTML 11</p>
+        
+        <div class="body-container">
+            <div class="flow-selector-container">
+                <c-flow-selector onitemselected={handleItemSelected}> </c-flow-selector>
+            </div>
+    
+            <div class="flow-info-container">
+                <c-flow-info selected-flow-item={selectedFlowItem}> </c-flow-info>
+            </div>
+        </div>
+        
 
-        <lightning-button  label="hola" onclick={click}> Button LWC</lightning-button>
 
     </div>
 </template>
