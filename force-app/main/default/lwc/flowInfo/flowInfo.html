@@ -1,3 +1,67 @@
 <template>
     <p>Selected item; {selectedFlowItem}</p>
+
+
+    <template if:true={isLoaded}>
+
+        <!--
+        <div>
+            <strong>Label:</strong> {flowInfo.label}
+        </div>
+        <div>
+            <strong>Description:</strong> {flowInfo.description}
+        </div>
+        <div>
+            <strong>Status:</strong> {flowInfo.status}
+        </div>
+        <div>
+            <strong>Process Type:</strong> {flowInfo.processType}
+        </div>
+
+        <lightning-formatted-url value={URLtoFlowBuilder} tooltip="Open Flow Builder"
+            label="View in Flow Builder" target="_blank"></lightning-formatted-url>
+
+        -->
+
+        <lightning-card title="Flow Information" icon-name="custom:custom63">
+            <div class="slds-p-around_medium">
+                <p><strong>Interview Label:</strong> {flowInfo.interviewLabel}</p>
+                <p><strong>Label:</strong> {flowInfo.label}</p>
+                <p><strong>Status:</strong> {flowInfo.status}</p>
+                <p><strong>Process Type:</strong> {flowInfo.processType}</p>
+                <p><strong>API Version:</strong> {flowInfo.apiVersion}</p>
+    
+                <lightning-accordion allow-multiple-sections-open>
+                    <lightning-accordion-section name="start" label="Start">
+                        <p><strong>Object:</strong> {flowInfo.start.object}</p>
+                        <p><strong>Trigger Type:</strong> {flowInfo.start.triggerType}</p>
+                        <p><strong>Record Trigger Type:</strong> {flowInfo.start.recordTriggerType}</p>
+                        <template for:each={flowInfo.start.filters} for:item="filter">
+                            <p key={filter.field}>
+                                <strong>Filter:</strong> {filter.field} {filter.operator} {filter.value.stringValue}
+                            </p>
+                        </template>
+                    </lightning-accordion-section>
+                    <lightning-accordion-section name="actionCalls" label="Action Calls">
+                        <template for:each={transformedData.actionCalls} for:item="action">
+                            <p key={action.actionName}>
+                                <strong>Action Name:</strong> {action.actionName}<br/>
+                                <strong>Action Type:</strong> {action.actionType}<br/>
+                                <strong>Label:</strong> {action.label}<br/>
+                                <strong>Name:</strong> {action.name}<br/>
+                                <strong>Input Parameter - Name:</strong> {action.inputParameterName}<br/>
+                                <strong>Input Parameter - Element Reference:</strong> {action.inputParameterElementReference}
+                            </p>
+                        </template>
+                    </lightning-accordion-section>
+                </lightning-accordion>
+            </div>
+        </lightning-card>
+
+    </template>
+
+    <template if:false={isLoaded}>
+        Your data is loading3!
+    </template>
+
 </template>

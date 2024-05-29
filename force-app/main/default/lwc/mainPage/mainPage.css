@@ -1,25 +1,24 @@
-
 .header-container {
     border: 1px solid black;
 }
 
-.main-container{
+.main-container {
     padding: 10px;
     display: block;
 }
 
-.body-container{
+.body-container {
     border: 1px solid green;
     padding: 5px;
     display: flex;
 }
 
-.flow-selector-container{
+.flow-selector-container {
     border: 1px solid blue;
-    flex:2;
+    flex: 2;
 }
 
-.flow-info-container{
+.flow-info-container {
     border: 1px solid red;
-    flex:8;
+    flex: 8;
 }
