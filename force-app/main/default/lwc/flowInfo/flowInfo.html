@@ -3,65 +3,211 @@
 
 
     <template if:true={isLoaded}>
+        <div class="card-section">
 
-        <!--
-        <div>
-            <strong>Label:</strong> {flowInfo.label}
-        </div>
-        <div>
-            <strong>Description:</strong> {flowInfo.description}
-        </div>
-        <div>
-            <strong>Status:</strong> {flowInfo.status}
-        </div>
-        <div>
-            <strong>Process Type:</strong> {flowInfo.processType}
-        </div>
+            <lightning-card title="Flow Information" icon-name="custom:custom63">
 
-        <lightning-formatted-url value={URLtoFlowBuilder} tooltip="Open Flow Builder"
-            label="View in Flow Builder" target="_blank"></lightning-formatted-url>
+                <div class="slds-p-around_medium">
 
-        -->
+                    <p><strong>Label:</strong> {flowInfo.label}</p>
+                    <p><strong>Description:</strong> {flowInfo.description}</p>
+                    <p><strong>Interview Label:</strong> {flowInfo.interviewLabel}</p>
+                    <p><strong>Status:</strong> {flowInfo.status}</p>
+                    <p><strong>Process Type:</strong> {flowInfo.processType}</p>
+                    <p><strong>API Version:</strong> {flowInfo.apiVersion}</p>
+                    <lightning-formatted-url value={URLtoFlowBuilder} tooltip="Open Flow Builder"
+                        label="View in Flow Builder" target="_blank"></lightning-formatted-url>
+        
+                    <lightning-accordion allow-multiple-sections-open>
 
-        <lightning-card title="Flow Information" icon-name="custom:custom63">
-            <div class="slds-p-around_medium">
-                <p><strong>Interview Label:</strong> {flowInfo.interviewLabel}</p>
-                <p><strong>Label:</strong> {flowInfo.label}</p>
-                <p><strong>Status:</strong> {flowInfo.status}</p>
-                <p><strong>Process Type:</strong> {flowInfo.processType}</p>
-                <p><strong>API Version:</strong> {flowInfo.apiVersion}</p>
-    
-                <lightning-accordion allow-multiple-sections-open>
-                    <lightning-accordion-section name="start" label="Start">
-                        <p><strong>Object:</strong> {flowInfo.start.object}</p>
-                        <p><strong>Trigger Type:</strong> {flowInfo.start.triggerType}</p>
-                        <p><strong>Record Trigger Type:</strong> {flowInfo.start.recordTriggerType}</p>
-                        <template for:each={flowInfo.start.filters} for:item="filter">
-                            <p key={filter.field}>
-                                <strong>Filter:</strong> {filter.field} {filter.operator} {filter.value.stringValue}
-                            </p>
+                        <template if:true={hasStart}>
+                            <lightning-accordion-section name="start" label="Start">
+                                <p><strong>Object:</strong> {flowInfo.start.object}</p>
+                                <p><strong>Trigger Type:</strong> {flowInfo.start.triggerType}</p>
+                                <p><strong>Record Trigger Type:</strong> {flowInfo.start.recordTriggerType}</p>
+                                <p><strong>Filter Logic:</strong> {flowInfo.start.filterLogic}</p>
+                                <template for:each={flowInfo.start.filters} for:item="filter">
+                                    <p key={filter.field}>
+                                        <strong>Filter:</strong> Field:{filter.field} - {filter.operator} - Value:{filter.value.stringValue}
+                                    </p>
+                                </template>
+                            </lightning-accordion-section>
                         </template>
-                    </lightning-accordion-section>
-                    <lightning-accordion-section name="actionCalls" label="Action Calls">
-                        <template for:each={transformedData.actionCalls} for:item="action">
-                            <p key={action.actionName}>
-                                <strong>Action Name:</strong> {action.actionName}<br/>
-                                <strong>Action Type:</strong> {action.actionType}<br/>
-                                <strong>Label:</strong> {action.label}<br/>
-                                <strong>Name:</strong> {action.name}<br/>
-                                <strong>Input Parameter - Name:</strong> {action.inputParameterName}<br/>
-                                <strong>Input Parameter - Element Reference:</strong> {action.inputParameterElementReference}
-                            </p>
+                        
+
+                        <template if:true={hasActionCalls}>
+                            <lightning-accordion-section name="actionCalls" label="Action Calls">
+                                <template for:each={transformedData.actionCalls} for:item="action">
+                                    <p key={action.actionName}>
+                                        <strong>Action Name:</strong> {action.actionName}<br/>
+                                        <strong>Action Type:</strong> {action.actionType}<br/>
+                                        <strong>Label:</strong> {action.label}<br/>
+                                        <strong>Input Parameter - Name:</strong> {action.inputParameterName}<br/>
+                                        <strong>Input Parameter - Element Reference:</strong> {action.inputParameterElementReference}
+                                    </p>
+                                </template>
+                            </lightning-accordion-section>
                         </template>
-                    </lightning-accordion-section>
-                </lightning-accordion>
-            </div>
-        </lightning-card>
+                        
+
+                        <template if:true={hasDecisions}>
+                            <lightning-accordion-section name="decisions" label="Decisions">
+                                <template for:each={transformedData.decisions} for:item="decision">
+                                    <p key={decision.name}>
+                                        <strong>Decision Label:</strong> {decision.label}<br/>
+                                        <strong>Decision Name:</strong> {decision.name}<br/>
+                                        <template for:each={decision.rules} for:item="rule">
+                                            <p key={rule.name}>
+                                                <strong>Rule Label:</strong> {rule.label}<br/>
+                                                <strong>Rule Name:</strong> {rule.name}<br/>
+                                                <template for:each={rule.conditions} for:item="condition">
+                                                    <p key={condition.leftValueReference}>
+                                                        <strong>Condition:</strong> Field:{condition.leftValueReference} - {condition.operator} - Value:{condition.rightValue}
+                                                    </p>
+                                                </template>
+                                                <strong>Connector Target:</strong> {rule.connectorTarget}
+                                            </p>                                        
+                                        </template>
+                                    </p>
+                                </template>
+                            </lightning-accordion-section>
+                        </template>
+                        
+
+                        <template if:true={hasSubflows}>
+                            <lightning-accordion-section name="subflows" label="Subflows">
+                                <template for:each={transformedData.subflows} for:item="subflow">
+                                    <p key={subflow.name}>
+                                        <strong>Subflow Label:</strong> {subflow.label}<br/>
+                                        <strong>Subflow Name:</strong> {subflow.name}<br/>
+                                        <template for:each={subflow.inputAssignments} for:item="input">
+                                            <p key={input.name}>
+                                                <strong>Input Assignment - Name:</strong> {input.name}<br/>
+                                                <strong>Input Assignment - Value:</strong> {input.value}
+                                            </p>
+                                        </template>
+                                        <br>
+                                    </p>
+                                </template>
+                            </lightning-accordion-section>
+                        </template>
+                        
+
+                        <template if:true={hasVariables}>
+                            <lightning-accordion-section name="variables" label="Variables">
+                                <template for:each={transformedData.variables} for:item="variable">
+                                    <p key={variable.name}>
+                                        <strong>Variable Name:</strong> {variable.name}<br/>
+                                        <strong>Data Type:</strong> {variable.dataType}<br/>
+                                        <strong>Is Collection:</strong> {variable.isCollection}<br/>
+                                        <strong>Is Input:</strong> {variable.isInput}<br/>
+                                        <strong>Is Output:</strong> {variable.isOutput}
+                                        <br>
+                                    </p>
+                                </template>
+                            </lightning-accordion-section>
+                        </template>
+                        
+
+                        <template if:true={hasFormulas}>
+                            <lightning-accordion-section name="formulas" label="Formulas">
+                                <template for:each={transformedData.formulas} for:item="formula">
+                                    <p key={formula.name}>
+                                        <strong>Formula Name:</strong> {formula.name}<br/>
+                                        <strong>Expression:</strong> {formula.expression}<br/>
+                                        <strong>Data Type:</strong> {formula.dataType}
+                                    </p>
+                                </template>
+                            </lightning-accordion-section>
+                        </template>
+
+
+                        <template if:true={hasConstants}>
+                            <lightning-accordion-section name="constants" label="Constants">
+                                <template for:each={transformedData.constants} for:item="constant">
+                                    <p key={constant.name}>
+                                        <strong>Constant Name:</strong> {constant.name}<br/>
+                                        <strong>Value:</strong> {constant.value}<br/>
+                                        <strong>Data Type:</strong> {constant.dataType}
+                                    </p>
+                                </template>
+                            </lightning-accordion-section>
+                        </template>
+
+                        <template if:true={hasRecordCreates}>
+                            <lightning-accordion-section name="recordCreates" label="Record Creates">
+                                <template for:each={transformedData.recordCreates} for:item="recordCreate">
+                                    <p key={recordCreate.name}>
+                                        <strong>Label:</strong> {recordCreate.label}<br/>
+                                        <strong>Name:</strong> {recordCreate.name}<br/>
+                                        <strong>Object:</strong> {recordCreate.object}
+                                    </p>
+                                </template>
+                            </lightning-accordion-section>
+                        </template>
+                        
+                        
+                        <template if:true={hasRecordDeletes}>
+                            <lightning-accordion-section name="recordDeletes" label="Record Deletes">
+                                <template for:each={transformedData.recordDeletes} for:item="recordDelete">
+                                    <p key={recordDelete.name}>
+                                        <strong>Label:</strong> {recordDelete.label}<br/>
+                                        <strong>Name:</strong> {recordDelete.name}<br/>
+                                        <strong>Object:</strong> {recordDelete.object}
+                                    </p>
+                                </template>
+                            </lightning-accordion-section>
+                        </template>
+                        
+
+                        <template if:true={hasRecordLookups}>
+                            <lightning-accordion-section name="recordLookups" label="Record Lookups">
+                                <template for:each={transformedData.recordLookups} for:item="recordLookup">
+                                    <p key={recordLookup.name}>
+                                        <strong>Label:</strong> {recordLookup.label}<br/>
+                                        <strong>Name:</strong> {recordLookup.name}<br/>
+                                        <strong>Object:</strong> {recordLookup.object}<br/>
+                                        <template for:each={recordLookup.filters} for:item="filter">
+                                            <p key={filter.field}>
+                                                <strong>Filter:</strong> {filter.field} {filter.operator} {filter.value}
+                                            </p>
+                                        </template>
+                                    </p>
+                                </template>
+                            </lightning-accordion-section>
+                        </template>
+                        
+
+                        <template if:true={hasRecordUpdates}>
+                            <lightning-accordion-section name="recordUpdates" label="Record Updates">
+                                <template for:each={transformedData.recordUpdates} for:item="recordUpdate">
+                                    <p key={recordUpdate.name}>
+                                        <strong>Label:</strong> {recordUpdate.label}<br/>
+                                        <strong>Name:</strong> {recordUpdate.name}<br/>
+                                        <strong>Object:</strong> {recordUpdate.object}
+                                    </p>
+                                </template>
+                            </lightning-accordion-section>
+                        </template>
+                        
+                    </lightning-accordion>
+
+                </div>
+
+            </lightning-card>
+
+        </div>
+
+        <div class="button-section">
+            <lightning-button label="Next" onclick={handleNextButton}> </lightning-button>
+        </div>
+        
 
     </template>
 
     <template if:false={isLoaded}>
-        Your data is loading3!
+        <!--<lightning-spinner alternative-text="Loading"></lightning-spinner>-->
+        Your data is loading...
     </template>
 
 </template>

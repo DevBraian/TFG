@@ -23,26 +23,25 @@ export default class FlowInfo extends LightningElement {
 
             console.log('llamando a getflowmetadata')
             this.getFlowMetadata(this.flowName, this.flowStatus);
-
         }
-
     }
 
     flowName;
     flowStatus;
     URLtoFlowBuilder
-    flowMetadata; // posiblemente a eliminar dsps de construir flowInfo{}
 
     flowInfo;
     isLoaded = false;
-
-    flowInformation = {}
 
     connectedCallback() {
         console.log('Hello JS from c-flowInfo')
     }
 
 
+    /**
+     * 
+     * @param {*} flowNameAndStatus 
+     */
     getFlowNameAndStatus(flowNameAndStatus) {
         // Encuentra la posición del primer corchete de apertura
         const bracketIndex = flowNameAndStatus.indexOf('[');
@@ -56,8 +55,13 @@ export default class FlowInfo extends LightningElement {
         console.log(`Status1: ${this.flowStatus}`);
     }
 
-    getFlowMetadata(flowName, flowStatus) {
 
+    /**
+     * 
+     * @param {*} flowName 
+     * @param {*} flowStatus 
+     */
+    getFlowMetadata(flowName, flowStatus) {
         let queryString = `SELECT Metadata FROM Flow WHERE MasterLabel='${flowName}' AND Status='${flowStatus}'`
 
         queryToolingAPI({ query: queryString })
@@ -74,17 +78,18 @@ export default class FlowInfo extends LightningElement {
                 this.URLtoFlowBuilder = `${window.location.origin}/builder_platform_interaction/flowBuilder.app?flowId=${auxID}`
                 ////////////////////////////////////////////////////
 
+                this.flowInfo.description = (this.flowInfo.description===null)?'No description':this.flowInfo.description
                 this.isLoaded = true;
-
-
-                //this.buildFlowInfoObject(auxResult.records[0]) //----!!!!!!----ELIMINAR
-
             })
             .catch(error => {
                 console.error('c-flowInfo - Error querying Tooling API2:', error);
             });
     }
 
+    
+    /**
+     * 
+     */
     get transformedData() {
         if(this.flowInfo){
             return {
@@ -93,49 +98,127 @@ export default class FlowInfo extends LightningElement {
                     ...action,
                     inputParameterName: action.inputParameters.length > 0 ? action.inputParameters[0].name : '',
                     inputParameterElementReference: action.inputParameters.length > 0 ? action.inputParameters[0].value.elementReference : ''
+                })),
+                decisions: this.flowInfo.decisions.map(decision => ({
+                    label: decision.label,
+                    name: decision.name,
+                    rules: decision.rules.map(rule => ({
+                        label: rule.label,
+                        name: rule.name,
+                        conditions: rule.conditions.map(condition => ({
+                            leftValueReference: condition.leftValueReference,
+                            operator: condition.operator,
+                            rightValue: condition.rightValue.stringValue
+                        })),
+                        connectorTarget: rule.connector ? rule.connector.targetReference : ''
+                    }))
+                })),
+                subflows: this.flowInfo.subflows.map(subflow => ({
+                    label: subflow.label,
+                    name: subflow.name,
+                    inputAssignments: subflow.inputAssignments.map(input => ({
+                        name: input.name,
+                        value: input.value.elementReference || input.value.stringValue
+                    }))
+                })),
+                variables: this.flowInfo.variables.map(variable => ({
+                    name: variable.name,
+                    dataType: variable.dataType,
+                    isCollection: variable.isCollection,
+                    isInput: variable.isInput,
+                    isOutput: variable.isOutput
+                })),
+                formulas: this.flowInfo.formulas.map(formula => ({
+                    name: formula.name,
+                    expression: formula.expression,
+                    dataType: formula.dataType
+                })),
+                constants: this.flowInfo.constants.map(constant => ({
+                    name: constant.name,
+                    value: constant.value,
+                    dataType: constant.dataType
+                })),
+                recordDeletes: this.flowInfo.recordDeletes.map(recordDelete => ({
+                    label: recordDelete.label,
+                    name: recordDelete.name,
+                    object: recordDelete.object
+                })),
+                recordLookups: this.flowInfo.recordLookups.map(recordLookup => ({
+                    label: recordLookup.label,
+                    name: recordLookup.name,
+                    object: recordLookup.object,
+                    filters: recordLookup.filters.map(filter => ({
+                        field: filter.field,
+                        operator: filter.operator,
+                        value: filter.value.stringValue
+                    }))
+                })),
+                recordUpdates: this.flowInfo.recordUpdates.map(recordUpdate => ({
+                    label: recordUpdate.label,
+                    name: recordUpdate.name,
+                    object: recordUpdate.object
                 }))
             };
         }  return {};
-        
     }
 
 
-    // TO-DO: Eliminar esta funcion
-    buildFlowInfoObject(rawJSON) {
-
-        let attributes = rawJSON.attributes;
-        let metadata = rawJSON.Metadata;
-
-        //This section builds URL to Flow Builder and FlowID
-        let parts = attributes.url.split('/')
-        let auxID = parts[parts.length - 1]
-        this.flowInformation.flowId = auxID
-        this.flowInformation.URLtoFlowBuilder = `${window.location.origin}/builder_platform_interaction/flowBuilder.app?flowId=${auxID}`
-        ////////////////////////////////////////////////////
-
-        this.flowInformation.apiVersion = metadata.apiVersion;
-        this.flowInformation.label = metadata.label;
-        this.flowInformation.description = (metadata.description === null) ? 'No description' : metadata.description
-        this.flowInformation.status = metadata.status;
-        this.flowInformation.processType = metadata.processType;
-
-        this.flowInformation.start = metadata.start;
-        this.flowInformation.decisions = metadata.decisions //!(!metadata.decisions.length) //T o F si hay decisiones
-        this.flowInformation.actionCalls = metadata.actionCalls;
-
-        this.flowInformation.recordsCreates = metadata.recordsCreates;
-        this.flowInformation.recordsDeletes = metadata.recordsDeletes;
-        this.flowInformation.recordsLookups = metadata.recordsLookups;
-        this.flowInformation.recordsUpdates = metadata.recordsUpdates;
-
-        this.flowInformation.subflows = metadata.subflows;
-
-        this.flowInformation.variables = metadata.variables;
-        this.flowInformation.formulas = metadata.formulas;
-        this.flowInformation.constants = metadata.constants;
-
-
-
-        console.log(JSON.stringify(this.flowInformation))
+    /**
+     * 
+     * @param {*} event 
+     */
+    handleNextButton(event){
+        console.log('button next clicked')
     }
+    
+
+    /**
+     * GETTERS SECTION
+     * This getters are used in order to render an accordion-section if there is data.
+     */
+
+    get hasActionCalls() {
+        return this.transformedData.actionCalls && this.transformedData.actionCalls.length > 0;
+    }
+    
+    get hasDecisions() {
+        return this.transformedData.decisions && this.transformedData.decisions.length > 0;
+    }
+
+    get hasStart() {
+        return this.transformedData.start && Object.keys(this.transformedData.start).length > 0;
+    }
+
+    get hasSubflows() {
+        return this.transformedData.subflows && this.transformedData.subflows.length > 0;
+    }
+
+    get hasVariables() {
+        return this.transformedData.variables && this.transformedData.variables.length > 0;
+    }
+
+    get hasFormulas() {
+        return this.transformedData.formulas && this.transformedData.formulas.length > 0;
+    }
+
+    get hasConstants() {
+        return this.transformedData.constants && this.transformedData.constants.length > 0;
+    }
+
+    get hasRecordCreates() {
+        return this.transformedData.recordCreates && this.transformedData.recordCreates.length > 0;
+    }
+
+    get hasRecordDeletes() {
+        return this.transformedData.recordDeletes && this.transformedData.recordDeletes.length > 0;
+    }
+
+    get hasRecordLookups() {
+        return this.transformedData.recordLookups && this.transformedData.recordLookups.length > 0;
+    }
+
+    get hasRecordUpdates() {
+        return this.transformedData.recordUpdates && this.transformedData.recordUpdates.length > 0;
+    }
+
 }
