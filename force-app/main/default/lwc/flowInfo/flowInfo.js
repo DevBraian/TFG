@@ -18,10 +18,7 @@ export default class FlowInfo extends LightningElement {
         this._selectedFlowItem = value;
 
         if (this._selectedFlowItem) {
-            console.log('llamando a getflownameandstatus')
             this.getFlowNameAndStatus(this._selectedFlowItem)
-
-            console.log('llamando a getflowmetadata')
             this.getFlowMetadata(this.flowName, this.flowStatus);
         }
     }
@@ -39,31 +36,30 @@ export default class FlowInfo extends LightningElement {
 
 
     /**
-     * 
-     * @param {*} flowNameAndStatus 
+     * UTIL FUNCTION
+     * This foo extracts the flowName and flowStatus from item selected in <c-flow-selector>.
+     * @param {*} flowNameAndStatus - String pattern with flowName and flowStatus -> 'flowName[flowStatus]'.
      */
     getFlowNameAndStatus(flowNameAndStatus) {
-        // Encuentra la posición del primer corchete de apertura
-        const bracketIndex = flowNameAndStatus.indexOf('[');
-
-        // Obtén el nombre del flujo y el estado
+        let bracketIndex = flowNameAndStatus.indexOf('[');
         this.flowName = flowNameAndStatus.substring(0, bracketIndex).trim();
         this.flowStatus = flowNameAndStatus.substring(bracketIndex + 1, flowNameAndStatus.length - 1).trim();
 
-        // Imprime los resultados
         console.log(`Flow Name1: ${this.flowName}`);
         console.log(`Status1: ${this.flowStatus}`);
     }
 
 
     /**
-     * 
-     * @param {*} flowName 
-     * @param {*} flowStatus 
+     * This function makes a query to Salesforce ToolingAPI in order to get the flow metadata.
+     * @param {*} flowName - Flow name we get in the previous function.
+     * @param {*} flowStatus - Flow status we get in the previous function. The status is necesary because it is possible
+     *                         to have flow with many version. Example: v1 Obsolete, v2 Active
      */
     getFlowMetadata(flowName, flowStatus) {
         let queryString = `SELECT Metadata FROM Flow WHERE MasterLabel='${flowName}' AND Status='${flowStatus}'`
 
+        //Apex method call to make a query to ToolingAPI.
         queryToolingAPI({ query: queryString })
             .then(result => {
                 console.log('c-flowInfo - Query result:', result);
@@ -88,7 +84,7 @@ export default class FlowInfo extends LightningElement {
 
     
     /**
-     * 
+     * This function plains the flow metadata object in order to iterate and access nested attributes in the HTML
      */
     get transformedData() {
         if(this.flowInfo){
@@ -162,16 +158,7 @@ export default class FlowInfo extends LightningElement {
         }  return {};
     }
 
-
-    /**
-     * 
-     * @param {*} event 
-     */
-    handleNextButton(event){
-        console.log('button next clicked')
-    }
     
-
     /**
      * GETTERS SECTION
      * This getters are used in order to render an accordion-section if there is data.

@@ -15,6 +15,11 @@ export default class FlowSelector extends LightningElement {
         this.getFlows()
     }
 
+
+    /**
+     * This function calls an Apex method to make a query to the ToolingAPI and gets all the flows we have
+     * in our SFDC organization.
+     */
     getFlows() {
         //We need an aux string to build de query using WHERE='sth . . .'
         let queryString = `SELECT MasterLabel,Status FROM Flow`
@@ -22,11 +27,8 @@ export default class FlowSelector extends LightningElement {
         // Llamar al método de Apex y manejar la promesa
         queryToolingAPI({ query: queryString })
             .then(result => {
-
                 this.data = JSON.parse(result)
-
                 this.items = this.orderDataByStatus(this.data)
-
                 console.log('Query result: 222:', result);
             })
             .catch(error => {
@@ -34,6 +36,13 @@ export default class FlowSelector extends LightningElement {
             });
     }
 
+
+    /**
+     * HANDLER
+     * This function handles when we select an item from <lightning-tree>. 
+     * Aditionally, it sends a custom event to parent component <c-mainPage> with the item selected.
+     * @param {*} event 
+     */
     handleOnselect(event) {
 
         this.selectedItemValue = event.detail.name;
@@ -42,6 +51,15 @@ export default class FlowSelector extends LightningElement {
         this.dispatchEvent(customEvent);
     }
 
+
+    /**
+     * This function builds the item array that is accepted and used in <lightning-tree>.
+     * Parent items -> Flow status (Active, Obsolete, Draft, InvalidDraft)
+     * Child items  -> Flow name
+     * So we have the flows organized by status.
+     * @param {*} dataObject - Result object -> { MasterLabel:flowName, Status:flowStatus }
+     * @returns - An array with flowNames organized by flowStatus.
+     */
     orderDataByStatus(dataObject) {
         const statusMap = {};
         dataObject.records.forEach(record => {

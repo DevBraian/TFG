@@ -1,14 +1,12 @@
 <template>
-    <p>Selected item; {selectedFlowItem}</p>
-
 
     <template if:true={isLoaded}>
+
         <div class="card-section">
 
             <lightning-card title="Flow Information" icon-name="custom:custom63">
 
                 <div class="slds-p-around_medium">
-
                     <p><strong>Label:</strong> {flowInfo.label}</p>
                     <p><strong>Description:</strong> {flowInfo.description}</p>
                     <p><strong>Interview Label:</strong> {flowInfo.interviewLabel}</p>
@@ -134,6 +132,7 @@
                             </lightning-accordion-section>
                         </template>
 
+
                         <template if:true={hasRecordCreates}>
                             <lightning-accordion-section name="recordCreates" label="Record Creates">
                                 <template for:each={transformedData.recordCreates} for:item="recordCreate">
@@ -191,18 +190,9 @@
                         </template>
                         
                     </lightning-accordion>
-
                 </div>
-
             </lightning-card>
-
         </div>
-
-        <div class="button-section">
-            <lightning-button label="Next" onclick={handleNextButton}> </lightning-button>
-        </div>
-        
-
     </template>
 
     <template if:false={isLoaded}>
