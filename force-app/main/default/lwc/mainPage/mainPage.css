@@ -20,5 +20,10 @@
 
 .flow-info-container {
     border: 1px solid red;
-    flex: 8;
+    flex: 3;
+}
+
+.case-generator-container {
+    border: 1px solid goldenrod;
+    flex: 5;
 }

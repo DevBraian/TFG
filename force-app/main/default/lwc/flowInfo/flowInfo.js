@@ -88,7 +88,7 @@ export default class FlowInfo extends LightningElement {
      */
     get transformedData() {
         if(this.flowInfo){
-            return {
+            return{
                 ...this.flowInfo,
                 actionCalls: this.flowInfo.actionCalls.map(action => ({
                     ...action,
