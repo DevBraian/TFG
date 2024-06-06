@@ -14,24 +14,10 @@
 
             <div class="case-generator-container">
                 <template if:true={selectedFlowItem}>
-
-                    <div class="slds-m-around_medium">
-                        <lightning-combobox 
-                            label="Elige un objeto" 
-                            value={selectedObject} 
-                            options={objectOptions}
-                            onchange={handleObjectChange}>
-                        </lightning-combobox>
-                    </div>
-                    <p> Objeto seleccionado: {selectedObject}</p>
-
-                    <c-case-generator selected-object={selectedObject}> </c-case-generator>
-
+                    <c-case-generator> </c-case-generator>
                 </template>
             </div>
+
         </div>
-
-
-
     </div>
 </template>
