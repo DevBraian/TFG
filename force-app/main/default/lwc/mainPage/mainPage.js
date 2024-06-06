@@ -8,6 +8,11 @@ export default class MainPage extends LightningElement {
         console.log("HELLO JS from c-mainPage ")
     }
 
+    /**
+     * Handle function in order to manage custom event sent by <c-flowSelector>.
+     * Here recives flow item selected (we recive flowName+[flowStatus])
+     * @param {*} event 
+     */
     handleItemSelected(event) {
         this.selectedFlowItem = event.detail;
     }
