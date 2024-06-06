@@ -1,10 +1,11 @@
-.header-container {
+/*.header-container {
     border: 1px solid black;
 }
 
 .main-container {
     padding: 10px;
     display: block;
+    height: ;
 }
 
 .body-container {
@@ -13,6 +14,49 @@
     display: flex;
 }
 
+.flow-selector-container {
+    border: 1px solid blue;
+    flex: 2;
+}
+
+.flow-info-container {
+    border: 1px solid red;
+    flex: 3;
+}
+
+.case-generator-container {
+    border: 1px solid goldenrod;
+    flex: 5;
+}*/
+
+.header-container {
+    border: 1px solid black;
+}
+
+.main-container {
+    padding: 10px;
+    display: block;
+    height: 73vh; /* Altura fija utilizando vh */
+}
+
+.body-container {
+    border: 1px solid green;
+    padding: 5px;
+    display: flex;
+    height: calc(100% - 50px); /* Ajusta según la altura de .header-container y otros márgenes/paddings */
+}
+
+.flow-selector-container,
+.flow-info-container,
+.case-generator-container {
+    flex: 1; /* Ajusta según la proporción deseada */
+    overflow: auto; /* Para permitir scroll si el contenido es demasiado grande */
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+/* Ajusta las proporciones según sea necesario */
 .flow-selector-container {
     border: 1px solid blue;
     flex: 2;

@@ -5,12 +5,19 @@
             onchange={handleObjectChange}>
         </lightning-combobox>
     </div>
-    <p> Objeto seleccionado: {selectedObject}</p>
 
-    <template if:true={selectedObject}>                         
-        <lightning-record-form object-api-name={selectedObject} fields={fields} onsuccess={handleSuccess} 
-        onerror={handleError}>
-        </lightning-record-form>
+    <div class="slds-m-around_medium">
+        <p class="slds-text-heading_small"> {selectedObject} </p>
+    </div>
+    
+
+    <template if:true={selectedObject}>
+        <div class="slds-m-around_medium">
+            <lightning-record-form object-api-name={selectedObject} fields={fields} onsuccess={handleSuccess}
+                onerror={handleError}>
+            </lightning-record-form>
+        </div>
+
     </template>
 
 </template>

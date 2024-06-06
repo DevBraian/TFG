@@ -11,7 +11,7 @@ export default class CaseGenerator extends LightningElement {
     recordId = null;
 
     connectedCallback() {
-        console.log('Hello JS from c-caseGenerator 11111111111111')
+        console.log('Hello JS from c-caseGenerator 222222222222222')
     }
 
     @track objectOptions = [];
@@ -73,6 +73,7 @@ export default class CaseGenerator extends LightningElement {
             return
         }
 
+        // eslint-disable-next-line @lwc/lwc/no-async-operation
         setTimeout(() => {
             console.log('retrasado 0,1seg')
             this.selectedObject = auxSelectedObject
