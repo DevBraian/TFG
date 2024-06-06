@@ -7,7 +7,7 @@ import queryToolingAPI from '@salesforce/apex/ToolingAPIUtility.queryToolingAPI'
 
 export default class FlowInfo extends LightningElement {
 
-    _selectedFlowItem; //this is the 'Flowname'+'[Status]' of item flow selected in <c-flow-selector> 
+    _selectedFlowItem; //this is the 'Flowname'+'[Status]' of item flow selected in <c-flow-selector>. Ex: "Convert Lead[Active]"
 
     @api
     get selectedFlowItem() {
@@ -88,7 +88,7 @@ export default class FlowInfo extends LightningElement {
      */
     get transformedData() {
         if(this.flowInfo){
-            return {
+            return{
                 ...this.flowInfo,
                 actionCalls: this.flowInfo.actionCalls.map(action => ({
                     ...action,

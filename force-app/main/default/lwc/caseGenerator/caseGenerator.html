@@ -1,0 +1,23 @@
+<template>
+
+    <div class="slds-m-around_medium">
+        <lightning-combobox label="Elige un objeto" value={selectedObject} options={objectOptions}
+            onchange={handleObjectChange}>
+        </lightning-combobox>
+    </div>
+
+    <div class="slds-m-around_medium">
+        <p class="slds-text-heading_small"> {selectedObject} </p>
+    </div>
+    
+
+    <template if:true={selectedObject}>
+        <div class="slds-m-around_medium">
+            <lightning-record-form object-api-name={selectedObject} fields={fields} onsuccess={handleSuccess}
+                onerror={handleError}>
+            </lightning-record-form>
+        </div>
+
+    </template>
+
+</template>
