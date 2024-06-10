@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 
-
 import { LightningElement, api } from 'lwc';
+import { ShowToastEvent } from 'lightning/platformShowToastEvent';
 
 import queryToolingAPI from '@salesforce/apex/ToolingAPIUtility.queryToolingAPI';
 
@@ -74,21 +74,23 @@ export default class FlowInfo extends LightningElement {
                 this.URLtoFlowBuilder = `${window.location.origin}/builder_platform_interaction/flowBuilder.app?flowId=${auxID}`
                 ////////////////////////////////////////////////////
 
-                this.flowInfo.description = (this.flowInfo.description===null)?'No description':this.flowInfo.description
+                this.flowInfo.description = (this.flowInfo.description === null) ? 'No description' : this.flowInfo.description
                 this.isLoaded = true;
             })
             .catch(error => {
+                this.dispatchEvent(new ShowToastEvent({ title: 'Please, select a valid flow item', message: 'Item selected is not a Flow, please select a valid one', variant: 'error' }))
+                this.isLoaded = false
                 console.error('c-flowInfo - Error querying Tooling API2:', error);
             });
     }
 
-    
+
     /**
      * This function plains the flow metadata object in order to iterate and access nested attributes in the HTML
      */
     get transformedData() {
-        if(this.flowInfo){
-            return{
+        if (this.flowInfo) {
+            return {
                 ...this.flowInfo,
                 actionCalls: this.flowInfo.actionCalls.map(action => ({
                     ...action,
@@ -155,10 +157,10 @@ export default class FlowInfo extends LightningElement {
                     object: recordUpdate.object
                 }))
             };
-        }  return {};
+        } return {};
     }
 
-    
+
     /**
      * GETTERS SECTION
      * This getters are used in order to render an accordion-section if there is data.
@@ -167,7 +169,7 @@ export default class FlowInfo extends LightningElement {
     get hasActionCalls() {
         return this.transformedData.actionCalls && this.transformedData.actionCalls.length > 0;
     }
-    
+
     get hasDecisions() {
         return this.transformedData.decisions && this.transformedData.decisions.length > 0;
     }
