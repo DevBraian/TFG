@@ -74,6 +74,10 @@ export default class CaseGenerator extends LightningElement {
     handleSuccess(event) {
         this.showToast('Éxito', `Registro creado con éxito - ID: ${event.detail.id}`, 'success');
         this.recordId = event.detail.id;
+
+        const customEvent = new CustomEvent('recordcreated', {detail:this.recordId});
+        this.dispatchEvent(customEvent);
+
         this.selectedObject = null;
     }
 
@@ -106,6 +110,12 @@ export default class CaseGenerator extends LightningElement {
             this.selectedObject = auxSelectedObject
           }, "500");
 
+    }
+
+    //TO-DO COMENTS
+    // eslint-disable-next-line no-unused-vars
+    handleCancel(event){
+        this.selectedObject = null
     }
 
     /**

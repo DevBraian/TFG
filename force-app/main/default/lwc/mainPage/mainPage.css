@@ -1,37 +1,8 @@
-/*.header-container {
-    border: 1px solid black;
-}
 
-.main-container {
-    padding: 10px;
-    display: block;
-    height: ;
-}
-
-.body-container {
-    border: 1px solid green;
-    padding: 5px;
-    display: flex;
-}
-
-.flow-selector-container {
-    border: 1px solid blue;
-    flex: 2;
-}
-
-.flow-info-container {
-    border: 1px solid red;
-    flex: 3;
-}
-
-.case-generator-container {
-    border: 1px solid goldenrod;
-    flex: 5;
-}*/
-
+/*
 .header-container {
-    border: 1px solid black;
-}
+    border: 0px solid black;
+}*/
 
 .main-container {
     padding: 10px;
@@ -40,10 +11,11 @@
 }
 
 .body-container {
-    border: 1px solid green;
+    /*border: 1px solid green;*/
     padding: 5px;
     display: flex;
     height: calc(100% - 50px); /* Ajusta según la altura de .header-container y otros márgenes/paddings */
+    gap: 0.25rem;
 }
 
 .flow-selector-container,
@@ -58,16 +30,16 @@
 
 /* Ajusta las proporciones según sea necesario */
 .flow-selector-container {
-    border: 1px solid blue;
+    /*border: 1px solid blue;*/
     flex: 2;
 }
 
 .flow-info-container {
-    border: 1px solid red;
+    /*border: 1px solid red;*/
     flex: 3;
 }
 
 .case-generator-container {
-    border: 1px solid goldenrod;
+    /*border: 1px solid goldenrod;*/
     flex: 5;
 }
