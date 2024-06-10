@@ -14,8 +14,8 @@ export default class CaseGenerator extends LightningElement {
         console.log('Hello JS from c-caseGenerator')
     }
 
+    
     @track objectOptions = [];
-
     /**
      * This wire Function, connects with apex class controller to get the sObjects we have in our org.
      * Then it manages the data we recived, building the object Array to use it in a <lightning-combobox>.
@@ -24,13 +24,16 @@ export default class CaseGenerator extends LightningElement {
     @wire(getObjects)
     wiredObjects({ error, data }) {
         if (data) {
-            this.objectOptions = data.map(obj => {
+            let sortData = [...data]
+            sortData.sort()
+            this.objectOptions = sortData.map(obj => {
                 return { label: obj, value: obj };
             });
         } else if (error) {
             this.showToast('Error', error.body.message, 'error');
         }
     }
+
 
     selectedObject;
     /**

@@ -13,10 +13,22 @@
             </div>
 
             <div class="case-generator-container">
+                
                 <template if:true={selectedFlowItem}>
                     <c-case-generator> </c-case-generator>
                 </template>
+
+                <div class="result-container">
+                    <c-result></c-result>
+                </div>
+
             </div>
+
+            <!--
+            <div class="result-container">
+                <c-result></c-result>
+            </div>
+            -->
 
         </div>
     </div>
