@@ -11,13 +11,13 @@
 
             <div class="flow-info-container slds-box slds-theme_default">
                 <template if:true={selectedFlowItem}>
-                    <c-flow-info selected-flow-item={selectedFlowItem}> </c-flow-info>
+                    <c-flow-info selected-flow-item={selectedFlowItem} onerroritemselected={handleErrorItemSelected}> </c-flow-info>
                 </template>
             </div>
 
-            <div class="case-generator-container slds-box slds-theme_default">
+            <div class="case-generator-and-result-container slds-box slds-theme_default">
                 
-                <template if:true={selectedFlowItem}>
+                <template if:true={isNotRecordCreated}>
                     <c-case-generator onrecordcreated={handleRecordCreated}> </c-case-generator>
                 </template>
 

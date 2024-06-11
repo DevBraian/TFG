@@ -6,12 +6,10 @@ export default class MainPage extends LightningElement {
 
     recordCreatedId; //ID of record created in <c-case-generator>
 
+    isRecordCreated; //variable to render or not >c-case-generator>
+
     connectedCallback() {
         console.log("HELLO JS from c-mainPage ")
-    }
-
-    renderedCallback(){
-        console.log('mainPage-renderedCALL',this.selectedFlowItem)
     }
 
     /**
@@ -21,16 +19,23 @@ export default class MainPage extends LightningElement {
      */
     handleItemSelected(event) {
         this.selectedFlowItem = event.detail;
+        this.isNotRecordCreated = true;
     }
 
     handleRecordCreated(event){
         this.recordCreatedId = event.detail;
+        this.isNotRecordCreated = false;
     }
 
+    // eslint-disable-next-line no-unused-vars
     handleReset(event){
-        console.log('reset button clicked', JSON.stringify(event.target))
-
         this.recordCreatedId = null;
         this.selectedFlowItem = null;
+        this.isNotRecordCreated = null;
+    }
+
+    handleErrorItemSelected(event){
+        console.log('customevent error selection item',event.detail)
+        this.handleReset(event)
     }
 }

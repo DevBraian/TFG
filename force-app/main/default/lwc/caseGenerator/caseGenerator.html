@@ -1,15 +1,14 @@
 <template>
 
     <div class="slds-m-around_small">
-        <lightning-combobox label="Select an object" placeholder="Objects" value={selectedObject} options={objectOptions}
-            onchange={handleObjectChange}>
+        <lightning-combobox label="Select an object" placeholder="Objects" value={selectedObject}
+            options={objectOptions} onchange={handleObjectChange}>
         </lightning-combobox>
     </div>
 
     <div class="slds-m-around_small">
         <p class="slds-text-heading_small"> {selectedObject} Record Creator </p>
     </div>
-    
 
     <template if:true={selectedObject}>
         <div class="slds-m-around_small">

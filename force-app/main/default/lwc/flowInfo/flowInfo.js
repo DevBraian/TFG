@@ -63,6 +63,10 @@ export default class FlowInfo extends LightningElement {
         if (!flowName) {
             this.dispatchEvent(new ShowToastEvent({ title: 'Please, select a valid flow item', message: 'Item selected is not a Flow, please select a valid one', variant: 'error' }))
             this.isLoaded = false
+
+            const customEvent = new CustomEvent('erroritemselected',{detail:'Error while selecting flow item'})
+            this.dispatchEvent(customEvent)
+
             return
         }
 

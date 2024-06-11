@@ -1,9 +1,4 @@
 
-/*
-.header-container {
-    border: 0px solid black;
-}*/
-
 .main-container {
     padding: 10px;
     display: block;
@@ -20,7 +15,7 @@
 
 .flow-selector-container,
 .flow-info-container,
-.case-generator-container {
+.case-generator-and-result-container {
     flex: 1; /* Ajusta según la proporción deseada */
     overflow: auto; /* Para permitir scroll si el contenido es demasiado grande */
     display: flex;
@@ -39,7 +34,7 @@
     flex: 3;
 }
 
-.case-generator-container {
+.case-generator-and-result-container {
     /*border: 1px solid goldenrod;*/
     flex: 5;
 }
