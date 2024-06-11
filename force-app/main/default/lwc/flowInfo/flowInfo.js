@@ -59,6 +59,13 @@ export default class FlowInfo extends LightningElement {
     getFlowMetadata(flowName, flowStatus) {
         let queryString = `SELECT Metadata FROM Flow WHERE MasterLabel='${flowName}' AND Status='${flowStatus}'`
 
+        //Check whether flowName exists to avoid making an invalid request to Salesforce API
+        if (!flowName) {
+            this.dispatchEvent(new ShowToastEvent({ title: 'Please, select a valid flow item', message: 'Item selected is not a Flow, please select a valid one', variant: 'error' }))
+            this.isLoaded = false
+            return
+        }
+
         //Apex method call to make a query to ToolingAPI.
         queryToolingAPI({ query: queryString })
             .then(result => {
@@ -78,8 +85,6 @@ export default class FlowInfo extends LightningElement {
                 this.isLoaded = true;
             })
             .catch(error => {
-                this.dispatchEvent(new ShowToastEvent({ title: 'Please, select a valid flow item', message: 'Item selected is not a Flow, please select a valid one', variant: 'error' }))
-                this.isLoaded = false
                 console.error('c-flowInfo - Error querying Tooling API2:', error);
             });
     }
