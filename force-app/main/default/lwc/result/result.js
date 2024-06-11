@@ -46,11 +46,16 @@ export default class Result extends LightningElement {
     set recordCreatedId(value){
         this._recordCreatedId=value;
         console.log('set recordcreated id:-------', this._recordCreatedId)
+        this.refreshRecords();
     }
 
     connectedCallback() {
         console.log('Hello JS from c-result')
 
+        this.refreshRecords();
+    }
+
+    refreshRecords(){
         queryRecentObject().then(res => {
             console.log('recent objs', res)
             let resObj = JSON.parse(res)
